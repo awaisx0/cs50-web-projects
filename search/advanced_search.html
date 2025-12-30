@@ -1,12 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Search</title>
+    <title>Advanced Search</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #202124;
+      }
+    </style>
   </head>
   <body>
-    <form action="https://google.com/search">
-      <input type="text" name="q" />
-      <input type="submit" value="Google Search" />
-    </form>
+    <nav>
+      <ul>
+        <li>
+          <a href="./index.html">Google Search</a>
+        </li>
+      </ul>
+    </nav>
+    <main>
+      <section class="google-asearch-section">
+        <h2>Advanced Search</h2>
+        <br />
+        <h3>Find pages with:</h3>
+        <form action="https://google.com/search">
+          <div class="field">
+            <label for="words">all these words:</label>
+            <input type="text" name="as_q" id="words" />
+          </div>
+          <div class="field">
+            <label for="exact">this exact word or phrase</label>
+            <input type="text" name="as_epq" id="exact" />
+          </div>
+          <div class="field">
+            <label for="any-words">any of these words:</label>
+            <input type="text" name="as_oq" id="any-words" />
+          </div>
+          <div class="field">
+            <label for="none-words">none of these words:</label>
+            <input type="text" name="as_eq" id="none-words" />
+          </div>
+          <input type="hidden" name="as_nlo" />
+          <input type="hidden" name="as_nhi" />
+          <input type="hidden" name="lr" />
+          <input type="hidden" name="cr" />
+          <input type="hidden" name="as_qdr" value="all" />
+          <input type="hidden" name="as_sitesearch" />
+          <input type="hidden" name="as_occt" value="any" />
+          <input type="hidden" name="as_filetype" />
+          <input type="hidden" name="tbs" />
+          <!-- https://www.google.com/search?as_q=cat&as_epq=cato&as_oq=whatever&as_eq=none&as_nlo=&as_nhi=&lr=&cr=&as_qdr=all&as_sitesearch=&as_occt=any&as_filetype=&tbs= -->
+          <input type="submit" />
+        </form>
+      </section>
+    </main>
   </body>
 </html>

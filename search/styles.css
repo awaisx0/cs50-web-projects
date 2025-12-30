@@ -10,6 +10,7 @@
   --color-grey-light: #4d5156;
   --color-grey: #616370;
   --white: white;
+  --g-orange: #eb724e;
 }
 
 body {
@@ -84,4 +85,43 @@ nav ul {
   width: fit-content;
   padding: 10px;
   background-color: var(--color-grey);
+}
+
+.google-asearch-section {
+  padding: 0px 50px;
+}
+
+.google-asearch-section h2 {
+  color: var(--g-orange);
+}
+
+.google-asearch-section form {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.google-asearch-section form input {
+  background-color: #1f1f1f;
+  border: 0.5px solid var(--color-grey-light);
+  width: 65%;
+  padding: 4px;
+}
+.google-asearch-section form input:active {
+  border-color: blue;
+}
+
+.google-asearch-section form .field {
+  display: flex;
+  justify-content: space-between;
+}
+
+.google-asearch-section form label {
+  font-size: 0.8rem;
+  color: rgb(186, 186, 186);
+}
+.google-asearch-section form input[type="submit"] {
+  padding: 10px;
+  width: fit-content;
+  align-self: flex-end;
 }
