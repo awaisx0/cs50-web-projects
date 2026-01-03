@@ -36,6 +36,9 @@ input {
   font-size: 1rem;
   border: none;
 }
+input:focus {
+  outline: none;
+}
 
 nav {
   padding: 20px;
@@ -74,9 +77,9 @@ nav ul {
   background-color: var(--color-grey-light);
   border-radius: 30px;
 }
-.search-form input[name="q"]:focus {
+/* .search-form input[name="q"]:focus {
   outline: none;
-}
+} */
 .search-form input[type="submit"] {
   width: fit-content;
   padding: 10px;
