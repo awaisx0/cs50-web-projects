@@ -3,6 +3,7 @@
   <head>
     <title>Advanced Search</title>
     <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="advanced_search.css" />
     <style>
       body {
         background-color: #202124;
@@ -18,26 +19,31 @@
       </ul>
     </nav>
     <main>
-      <section class="google-asearch-section">
+      <section class="google-advsearch-section">
         <h2>Advanced Search</h2>
-        <br />
+        <!-- <br /> -->
         <h3>Find pages with:</h3>
-        <form action="https://google.com/search">
+        <form action="https://google.com/search" class="search-form">
           <div class="field">
             <label for="words">all these words:</label>
-            <input type="text" name="as_q" id="words" />
+            <input autocomplete="off" type="text" name="as_q" id="words" />
           </div>
           <div class="field">
             <label for="exact">this exact word or phrase</label>
-            <input type="text" name="as_epq" id="exact" />
+            <input autocomplete="off" type="text" name="as_epq" id="exact" />
           </div>
           <div class="field">
             <label for="any-words">any of these words:</label>
-            <input type="text" name="as_oq" id="any-words" />
+            <input autocomplete="off" type="text" name="as_oq" id="any-words" />
           </div>
           <div class="field">
             <label for="none-words">none of these words:</label>
-            <input type="text" name="as_eq" id="none-words" />
+            <input
+              autocomplete="off"
+              type="text"
+              name="as_eq"
+              id="none-words"
+            />
           </div>
           <input type="hidden" name="as_nlo" />
           <input type="hidden" name="as_nhi" />
@@ -49,7 +55,7 @@
           <input type="hidden" name="as_filetype" />
           <input type="hidden" name="tbs" />
           <!-- https://www.google.com/search?as_q=cat&as_epq=cato&as_oq=whatever&as_eq=none&as_nlo=&as_nhi=&lr=&cr=&as_qdr=all&as_sitesearch=&as_occt=any&as_filetype=&tbs= -->
-          <input type="submit" />
+          <input type="submit" value="Advanced Search" />
         </form>
       </section>
     </main>

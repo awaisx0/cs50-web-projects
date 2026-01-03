@@ -3,6 +3,7 @@
   <head>
     <title>Search</title>
     <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="image_search.css" />
   </head>
   <body>
     <nav>
@@ -13,13 +14,13 @@
       </ul>
     </nav>
     <main>
-      <section class="google-search-section">
+      <section class="google-img-search-section">
         <div class="google-logo">
           <img src="./google.png" alt="google-logo" />
         </div>
         <div class="search-form">
           <form action="https://google.com/search">
-            <input type="text" name="q" />
+            <input autocomplete="off" type="text" name="q" />
             <input type="hidden" name="tbm" value="isch" />
             <input type="submit" value="Google Search" />
           </form>

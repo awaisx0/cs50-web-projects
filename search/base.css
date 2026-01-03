@@ -16,10 +16,16 @@
 }
 
 body {
+  height: 100vh;
   background-color: var(--bg-color);
   color: white;
   font-family: Inter, Arial, sans-serif;
   font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+main {
+  flex-grow: 1;
 }
 img {
   max-width: 100%;
@@ -49,84 +55,4 @@ nav ul {
   gap: 20px;
   justify-content: flex-end;
   list-style-type: none;
-}
-
-.google-search-section {
-  /* padding: 80px 0 0 0; */
-  height: 90vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  justify-content: center;
-}
-
-.google-logo {
-  width: 350px;
-}
-
-.search-form form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-.search-form input[name="q"] {
-  width: 45vw;
-  padding: 15px 20px;
-  background-color: var(--color-grey-light);
-  border-radius: 30px;
-}
-/* .search-form input[name="q"]:focus {
-  outline: none;
-} */
-.search-form input[type="submit"] {
-  width: fit-content;
-  padding: 10px;
-  background-color: var(--color-grey);
-}
-
-.lucky-btn {
-  width: fit-content;
-  padding: 10px;
-  background-color: var(--color-grey);
-}
-
-.google-asearch-section {
-  padding: 0px 50px;
-}
-
-.google-asearch-section h2 {
-  color: var(--g-orange);
-}
-
-.google-asearch-section form {
-  width: 60%;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-.google-asearch-section form input {
-  background-color: #1f1f1f;
-  border: 0.5px solid var(--color-grey-light);
-  width: 65%;
-  padding: 4px;
-}
-.google-asearch-section form input:active {
-  border-color: blue;
-}
-
-.google-asearch-section form .field {
-  display: flex;
-  justify-content: space-between;
-}
-
-.google-asearch-section form label {
-  font-size: 0.8rem;
-  color: rgb(186, 186, 186);
-}
-.google-asearch-section form input[type="submit"] {
-  padding: 10px;
-  width: fit-content;
-  align-self: flex-end;
 }
