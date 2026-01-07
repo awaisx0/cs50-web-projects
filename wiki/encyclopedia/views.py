@@ -31,3 +31,9 @@ def random_page(request):
     print(random_entry)
     return HttpResponseRedirect(reverse("page", args=[random_entry]))
     # return HttpResponse("random")
+
+def create_entry(request):
+    return render(request, "encyclopedia/new_entry.html")
+
+def search(request):
+    ...
