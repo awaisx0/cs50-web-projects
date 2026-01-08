@@ -1,10 +1,8 @@
 from django.shortcuts import render
 from django.urls import reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from markdown2 import Markdown
 import random
-import pdb
-import ipdb
 
 from . import util
 
@@ -16,12 +14,29 @@ def index(request):
 
 def page(request, title):
     entry = util.get_entry(title)
+    
+    # render 404 page
+    if not entry:
+        raise Http404("Requested page not found")
+    
+    # markdown to html conversion
     markdowner = Markdown()
     entry_html = markdowner.convert(str(entry))
+    
     return render(request, "encyclopedia/page.html", {
         "title": title,
         "entry_html": entry_html
     })
+    
+    
+def search(request):
+    query = request.GET.get("q")
+    print(query)
+    
+    
+    
+    
+    
     
 def random_page(request):
     print("random called")
@@ -35,5 +50,3 @@ def random_page(request):
 def create_entry(request):
     return render(request, "encyclopedia/new_entry.html")
 
-def search(request):
-    ...
