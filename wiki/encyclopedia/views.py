@@ -52,6 +52,17 @@ def search(request):
     
     
     
+def new_page(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        content = request.POST.get("content")
+        entries_list = util.list_entries()
+        if title in entries_list:
+            raise Http404("entry with this title already exists")
+        
+        util.save_entry(title, content)
+        return HttpResponseRedirect(reverse("index"))
+    return render(request, "encyclopedia/new_page.html")
     
     
 def random_page(request):
@@ -60,6 +71,4 @@ def random_page(request):
     return HttpResponseRedirect(reverse("page", args=[random_entry]))
     # return HttpResponse("random")
 
-def create_entry(request):
-    return render(request, "encyclopedia/new_entry.html")
 
