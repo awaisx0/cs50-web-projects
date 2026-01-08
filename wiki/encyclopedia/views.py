@@ -30,20 +30,33 @@ def page(request, title):
     
     
 def search(request):
+    # get q from query params
     query = request.GET.get("q")
-    print(query)
     
+    # if seach query matches an entry, redirect to entry page
+    entry = util.get_entry(query)
+    if entry:
+        return HttpResponseRedirect(reverse("page", args=[query]))
+    
+    entries_list = util.list_entries()
+    
+    search_results = []
+    for entry in entries_list:
+        # check if query is substring of entry, then append to search results
+        if query in entry:
+            search_results.append(entry)
+            
+    return render(request, "encyclopedia/search_results.html", {
+        "search_results": search_results
+    })
     
     
     
     
     
 def random_page(request):
-    print("random called")
     entries_list = util.list_entries()
-    print(entries_list)
     random_entry = random.choice(entries_list)
-    print(random_entry)
     return HttpResponseRedirect(reverse("page", args=[random_entry]))
     # return HttpResponse("random")
 
