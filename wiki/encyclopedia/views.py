@@ -56,12 +56,16 @@ def new_page(request):
     if request.method == "POST":
         title = request.POST.get("title")
         content = request.POST.get("content")
+        
+        # what if title and content are empty strings
+        
         entries_list = util.list_entries()
         if title in entries_list:
             raise Http404("entry with this title already exists")
         
         util.save_entry(title, content)
         return HttpResponseRedirect(reverse("page", args=[title]))
+    
     return render(request, "encyclopedia/new_page.html")
     
 def edit_page(request, title):
@@ -72,6 +76,7 @@ def edit_page(request, title):
     
     entry = util.get_entry(title)
     content = entry if entry else ""
+    
     return render(request, "encyclopedia/edit_page.html", {
         "title": title,
         "content": content,
