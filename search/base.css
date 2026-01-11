@@ -10,9 +10,10 @@
 :root {
   --bg-color: #1f1f1f;
   --color-grey-light: #4d5156;
-  --color-grey: #616370;
+  --color-grey: #303134;
   --white: white;
   --g-orange: #eb724e;
+  --color-blue: #8ab4f8;
 }
 
 body {
