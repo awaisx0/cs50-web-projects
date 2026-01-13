@@ -9,8 +9,7 @@
 
 <form action="{% url 'new_page' %}" method="post" >
   {% csrf_token %}
-  <input type="text" placeholder="Title" name="title" />
-  <textarea name="content" id="" title="Content here"></textarea>
+  {{ form }}
   <input type="submit" />
 </form>
 

@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from markdown2 import Markdown
 import random
 
+from .forms import NewPageForm, EditPageForm
 from . import util
 
 
@@ -54,32 +55,55 @@ def search(request):
     
 def new_page(request):
     if request.method == "POST":
-        title = request.POST.get("title")
-        content = request.POST.get("content")
+        # title = request.POST.get("title")
+        # content = request.POST.get("content")
         
-        # what if title and content are empty strings
+        page_form = NewPageForm, EditPageForm(request.POST)
         
-        entries_list = util.list_entries()
-        if title in entries_list:
-            raise Http404("entry with this title already exists")
+        if page_form.is_valid():
+            title = page_form.cleaned_data.get("title")
+            content = page_form.cleaned_data.get("content")
+            
+
+            # if a an entry is already added with same title
+            entries_list = util.list_entries()
+            if title in entries_list:
+                raise Http404("entry with this title already exists")
+            
+            # success and saving entry
+            util.save_entry(title, content)
+            return HttpResponseRedirect(reverse("page", args=[title]))
         
-        util.save_entry(title, content)
-        return HttpResponseRedirect(reverse("page", args=[title]))
+        else:
+            return render(request, "encyclopedia/new_page.html", {
+                "form": page_form
+            })
+            
     
-    return render(request, "encyclopedia/new_page.html")
+    return render(request, "encyclopedia/new_page.html", {
+        "form": NewPageForm(),
+    })
     
 def edit_page(request, title):
     if request.method == "POST":
-        content = request.POST.get("content")
-        util.save_entry(title, content)
-        return HttpResponseRedirect(reverse("page", args=[title]))
+        page_form = EditPageForm(request.POST)
+        
+        if page_form.is_valid():
+            content = page_form.cleaned_data.get("content")
+            util.save_entry(title, content)
+            return HttpResponseRedirect(reverse("page", args=[title]))
+        else:
+            return render(request, "encyclopedia/edit_page.html", {
+                "title": title,
+                "form": page_form
+            })
+            
     
     entry = util.get_entry(title)
-    content = entry if entry else ""
-    
+    page_form = EditPageForm({"content": entry})
     return render(request, "encyclopedia/edit_page.html", {
         "title": title,
-        "content": content,
+        "form": page_form,
     })
     
 def random_page(request):
