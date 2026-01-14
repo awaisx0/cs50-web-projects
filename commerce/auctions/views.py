@@ -103,3 +103,7 @@ def create_new_listing(request):
     return render(request, "auctions/create_listing.html", {
         "form": NewListingForm()
     })
+
+
+def listing(request, listing_id):
+    return render(request, "auctions/listing.html")

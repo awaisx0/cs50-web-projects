@@ -10,16 +10,19 @@
                 <img src="{{ listing.img_url }}" alt="{{ listing.title}}">
             </div>
             <div>
-                <h3>{{ listing.title }}</h3>
+                <a href="{% url 'listing_view' listing.id %}">
+                    <h3>{{ listing.title }}</h3>
+                </a>
                 <h4>Price: ${{ listing.starting_bid }}</h4>
                 <p><b>Description: </b>{{ listing.description }}</p>
             </div>
         {% else %}
             <div class="img-url">
-                <img src="{{ listing.img_url }}" alt="{{ listing.title}}">
             </div>
             <div>
-                <h3>{{ listing.title }}</h3>
+                <a href="{% url 'listing_view' listing.id %}">
+                    <h3>{{ listing.title }}</h3>
+                </a>
                 <h4>Price: ${{ listing.starting_bid }}</h4>
                 <p><b>Description: </b>{{ listing.description }}</p>
             </div>
