@@ -11,7 +11,7 @@ class Auction(models.Model):
     description = models.CharField(max_length=500)
     starting_bid = models.DecimalField(max_digits=8, decimal_places=2)
     is_active = models.BooleanField(default=True)
-    won_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="auctions_won")
+    won_by = models.ForeignKey(User, on_delete=models.CASCADE, default=None, null=True, related_name="auctions_won")
     img_url = models.URLField(blank=True, null=True) # optional
     category = models.CharField(max_length=25, blank=True, null=True) # optional
 
