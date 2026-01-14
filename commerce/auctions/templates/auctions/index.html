@@ -3,5 +3,29 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-    TODO
+    {% for listing in listings %}
+    <div class="index-listing">
+        {% if listing.img_url %}
+            <div class="listing-img">
+                <img src="{{ listing.img_url }}" alt="{{ listing.title}}">
+            </div>
+            <div>
+                <h3>{{ listing.title }}</h3>
+                <h4>Price: ${{ listing.starting_bid }}</h4>
+                <p><b>Description: </b>{{ listing.description }}</p>
+            </div>
+        {% else %}
+            <div class="img-url">
+                <img src="{{ listing.img_url }}" alt="{{ listing.title}}">
+            </div>
+            <div>
+                <h3>{{ listing.title }}</h3>
+                <h4>Price: ${{ listing.starting_bid }}</h4>
+                <p><b>Description: </b>{{ listing.description }}</p>
+            </div>
+        {% endif %}
+    </div>
+
+    {% endfor %}
+
 {% endblock %}

@@ -14,6 +14,8 @@ class Auction(models.Model):
     won_by = models.ForeignKey(User, on_delete=models.CASCADE, default=None, null=True, related_name="auctions_won")
     img_url = models.URLField(blank=True, null=True) # optional
     category = models.CharField(max_length=25, blank=True, null=True) # optional
+    
+    
 
     
 class Bid(models.Model):

@@ -1,3 +1,26 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    padding: 10px;
+  padding: 10px;
+}
+
+img {
+  max-width: 100%;
+}
+.index-listing {
+  display: flex;
+  gap: 30px;
+  border: 1px solid black;
+}
+.index-listing:hover {
+  background-color: rgb(228, 228, 228);
+}
+.index-listing .listing-img {
+  width: 300px;
+  height: 300px;
+  color: brown;
 }
