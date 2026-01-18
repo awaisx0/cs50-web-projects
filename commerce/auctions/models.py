@@ -2,6 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
+class User(AbstractUser):
+    watchlist = models.ManyToManyField('Auction')
 
 class Auction(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="my_auctions")
@@ -13,9 +15,6 @@ class Auction(models.Model):
     img_url = models.URLField(blank=True, null=True) # optional
     category = models.CharField(max_length=25, blank=True, null=True) # optional
 
-
-class User(AbstractUser):
-    watchlist = models.ManyToManyField(Auction)
 
     
 class Bid(models.Model):

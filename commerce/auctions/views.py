@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -99,7 +100,7 @@ def register(request):
         return render(request, "auctions/register.html")
     
     
-    
+@login_required
 def create_new_listing(request):
     if request.method == "POST":
         form = NewListingForm(request.POST)
@@ -137,7 +138,8 @@ def listing_view(request, listing_id):
         "commentForm": NewCommentForm(),
         "comments": comments,
     })
-    
+
+@login_required
 def bid_view(request, listing_id):
     if request.method == "POST":
         bid_form = NewBidForm(request.POST)
@@ -182,6 +184,16 @@ def comment_view(request, listing_id):
             return HttpResponseRedirect(reverse("listing_view", args=[listing_id]))
 
         
+@login_required
+def add_watchlist(request, listing_id):
+    auction = Auction.objects.get(pk=listing_id)
+    user = User.objects.get(pk=request.user.id)
+    user.watchlist.add(auction)
+    return HttpResponseRedirect(reverse("listing_view", args=[listing_id]))
 
-        
-        
+def watchlist(request):
+    user = User.objects.get(pk=request.user.id)
+    watch_auctions = user.watchlist.all()
+    return render(request, "auctions/watchlist.html", {
+        "watchlist": watch_auctions,
+    })
