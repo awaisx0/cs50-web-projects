@@ -5,5 +5,61 @@
 {% endblock %}
 
 {% block body %}
-<h1>Listing: {{ </h1>
+<h1>Listing: {{ auction.title }}</h1>
+
+{% if auction.img_url %}
+    <img src="{{ auction.img_url }}" alt="">
+{% endif %}
+
+<p>{{ auction.description }}</p>
+
+<h2>${{ auction.starting_bid }}</h2>
+
+{% if user.is_authenticated %}
+    <div class="bid-section">
+        <p> bid(s) so far.</p>
+        <form action="{% url 'bid_view' auction.id %}" method="post">
+            {% csrf_token %}
+            {{ bidForm }}
+            <input type="hidden" name="user_id" value="{{ user.id }}" >
+            <input type="submit" value="Place bid">
+        </form>
+    </div>
+{% endif %}
+
+<div class="details-section">
+ <h3>Details</h3>
+ <ul>
+    <li>Listed by: {{ auction.owner }}</li>
+    {% if auction.category %}
+    <li>Category: {{ auction.category }}</li>
+    {% else %}
+    <li>Category: No Category Listed</li>
+    {% endif %}
+ </ul>
+</div>
+
+<div class="make-comment">
+    <h2>Make a comment</h2>
+    <form action="{% url 'comment_view' auction.id %}" method="post">
+        {% csrf_token %}
+        {{ commentForm }}
+        <input type="hidden" name="user_id" value="{{ user.id }}" >
+        <input type="submit" value="comment" >
+
+    </form>
+</div>
+
+<div class="comments-section">
+    <h2>Comments:</h2>
+    {% for comment in comments %}
+        <div>
+            <h3>User: {{ comment.comment_by.username }}</h3>
+            <p>{{ comment.comment_text }}</p>
+        </div>
+    {% empty %}
+        <p>No comments made yet</p>
+    {% endfor %}
+</div>
+
 {% endblock %}

@@ -15,6 +15,29 @@ class NewListingForm(forms.Form):
     img_url = forms.URLField(label="Image URL for the listing", required=False)
     category = forms.CharField(max_length=25, label="Category", required=False)
     
+    
+class NewBidForm(forms.Form):
+    bid = forms.DecimalField(label="Your bid is the current bid", max_digits=8, decimal_places=2)
+    
+    def valid_bid(self, listing_id):
+        bid = self.cleaned_data.get('bid')
+        
+        starting_bid = Auction.objects.get(pk=listing_id).starting_bid
+        
+        valid_bid_price = starting_bid
+        
+        bids = Bid.objects.filter(auction=listing_id)
+        if len(bids) > 0:
+            largest_bid = bids.order_by('-bid_price').first()
+            valid_bid_price = largest_bid.bid_price
+            
+        if bid < valid_bid_price:
+            raise forms.ValidationError(f"Bid must be atleast greater than {valid_bid_price}")
+        return bid
+    
+class NewCommentForm(forms.Form):
+    comment_text = forms.CharField(label="Comment", max_length=500)
+    
 
 
 def index(request):
@@ -107,6 +130,58 @@ def create_new_listing(request):
 
 def listing_view(request, listing_id):
     auction = Auction.objects.filter(id = listing_id).first()
+    comments = Comment.objects.filter(auction=auction)
     return render(request, "auctions/listing.html", {
-        "auction": auction
+        "auction": auction,
+        "bidForm": NewBidForm(),
+        "commentForm": NewCommentForm(),
+        "comments": comments,
     })
+    
+def bid_view(request, listing_id):
+    if request.method == "POST":
+        bid_form = NewBidForm(request.POST)
+        
+        if bid_form.is_valid():
+            bid_price = bid_form.valid_bid(listing_id=listing_id)
+            
+            bidder_id = request.POST.get("user_id")
+            
+            auction = Auction.objects.get(pk=listing_id)
+            bidder = User.objects.get(pk=bidder_id)
+
+            new_bid = Bid(bid_price=bid_price, bid_by=bidder, auction=auction)
+            new_bid.save()
+
+            
+            return HttpResponseRedirect(reverse("listing_view", args=[listing_id]))
+        
+        else:
+            auction = Auction.objects.filter(id = listing_id).first()
+            return render(request, "auctions/listing.html", {
+                "auction": auction,
+                "bidForm": bid_form
+            })
+            
+                
+                
+def comment_view(request, listing_id):
+    if request.method == "POST":
+        new_comment_form = NewCommentForm(request.POST)
+        
+        if new_comment_form.is_valid():
+            comment_text = new_comment_form.cleaned_data.get("comment_text")
+            user_id = request.POST.get("user_id")
+            
+            user = User.objects.get(pk=user_id)
+            auction = Auction.objects.get(pk=listing_id)
+
+            new_comment = Comment(comment_text=comment_text, auction=auction, comment_by=user)
+
+            new_comment.save()
+            return HttpResponseRedirect(reverse("listing_view", args=[listing_id]))
+
+        
+
+        
+        

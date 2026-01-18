@@ -11,6 +11,7 @@ body {
 img {
   max-width: 100%;
 }
+
 .index-listing {
   display: flex;
   gap: 30px;
@@ -21,4 +22,8 @@ img {
 }
 .index-listing .listing-img {
   width: 300px;
+}
+
+.main {
+  padding: 0px 30px 0px 30px;
 }
