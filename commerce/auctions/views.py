@@ -105,5 +105,8 @@ def create_new_listing(request):
     })
 
 
-def listing(request, listing_id):
-    return render(request, "auctions/listing.html")
+def listing_view(request, listing_id):
+    auction = Auction.objects.filter(id = listing_id).first()
+    return render(request, "auctions/listing.html", {
+        "auction": auction
+    })

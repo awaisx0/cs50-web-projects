@@ -17,7 +17,8 @@
                 <p><b>Description: </b>{{ listing.description }}</p>
             </div>
         {% else %}
-            <div class="img-url">
+            <div class="listing-img">
+                <img src="https://placehold.co/300x300?text=placeholder+img" alt="">
             </div>
             <div>
                 <a href="{% url 'listing_view' listing.id %}">
