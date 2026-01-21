@@ -1,3 +1,7 @@
+:root {
+  --bg-blue: black;
+  --color-pastel: #cdcdc1;
+}
 * {
   margin: 0;
   padding: 0;
@@ -6,24 +10,76 @@
 
 body {
   padding: 10px;
+  background-color: black;
+  color: white;
 }
 
 img {
   max-width: 100%;
 }
 
-.index-listing {
-  display: flex;
-  gap: 30px;
-  border: 1px solid black;
+input {
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: var(--color-pastel);
+  color: white;
 }
-.index-listing:hover {
-  background-color: rgb(228, 228, 228);
+
+input[type="submit"] {
+  align-self: flex-start;
+  background-color: blue;
 }
-.index-listing .listing-img {
-  width: 300px;
+
+textarea {
+  outline: none;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: var(--color-pastel);
+  color: white;
+  resize: none;
 }
 
 .main {
-  padding: 0px 30px 0px 30px;
+  padding: 0px 50px 0px 50px;
+}
+
+/* INDEX PAGE */
+
+.index-listings-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 20px;
+}
+
+.index-listing {
+  display: flex;
+  gap: 30px;
+  border: 1px solid white;
+}
+
+.listing-details {
+  padding: 20px 5px;
+}
+
+.index-listing .listing-img {
+  flex-basis: 20%;
+}
+
+/* INDEX PAGE END */
+
+.create-listing-form {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.create-listing-form div {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  margin: 20px 0px;
 }
