@@ -58,9 +58,10 @@
             <h3>User: {{ comment.comment_by.username }}</h3>
             <p>{{ comment.comment_text }}</p>
         </div>
+        <hr>
     {% empty %}
         <p>No comments made yet</p>
-    {% endfor %}
+    {% endfor %}    
 </div>
 
 {% endblock %}
