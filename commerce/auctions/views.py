@@ -85,7 +85,7 @@ def create_new_listing(request):
             category = form.cleaned_data["category"]
             category_obj = None
             if category:
-                category_obj = Category.objects.filter(category_name=category).first()
+                category_obj = Category.objects.filter(id=category).first()
             new_auction = Auction(owner=request.user, title=title, description=description, starting_bid=bid_price, img_url=img_url, category=category_obj)
             new_auction.save()
             
@@ -311,4 +311,14 @@ def categories(request):
     all_categories = Category.objects.all()
     return render(request, "auctions/categories.html", {
         "categories": all_categories,
+    })
+    
+def category(request, category_name):
+    category = Category.objects.get(category_name=category_name)
+    print(category)
+    auctions = Auction.objects.filter(category=category)
+    print(auctions)
+    return render(request, "auctions/category.html", {
+        "category_name": category_name,
+        "listings": auctions,
     })

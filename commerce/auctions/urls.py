@@ -27,4 +27,5 @@ urlpatterns = [
     path("watchlist", views.watchlist, name="watchlist"),
     
     path("categories", views.categories, name="categories"),
+    path("categories/<str:category_name>", views.category, name="category"),
 ]

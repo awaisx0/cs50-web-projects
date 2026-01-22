@@ -1,0 +1,50 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+{{category_name}}
+{% endblock %}
+
+{% block body %}
+<h2>Category: {{category_name}}</h2>
+
+<div class="index-listings-container">
+  {% for listing in listings %}
+  <div class="index-listing">
+
+    <!-- part if there's an img_url -->
+
+    {% if listing.img_url %}
+    <div class="listing-img">
+      <img src="{{ listing.img_url }}" alt="{{ listing.title}}" />
+    </div>
+    <div class="listing-details">
+      <a href="{% url 'listing_view' listing.id %}">
+        <h3>{{ listing.title }}</h3>
+      </a>
+      <h4>Price: ${{ listing.starting_bid }}</h4>
+      <p><b>Description: </b>{{ listing.description }}</p>
+    </div>
+
+    {% else %}
+
+    <!-- part if there's an img_url -->
+
+    <div class="listing-img">
+      <img
+        src="https://placehold.co/300x300/gray/white?text=placeholder+img"
+        alt=""
+      />
+    </div>
+    <div class="listing-details">
+      <a href="{% url 'listing_view' listing.id %}">
+        <h3>{{ listing.title }}</h3>
+      </a>
+      <h4>Price: ${{ listing.starting_bid }}</h4>
+      <p><b>Description: </b>{{ listing.description }}</p>
+    </div>
+    {% endif %}
+  </div>
+
+  {% endfor %}
+</div>
+{% endblock %}
