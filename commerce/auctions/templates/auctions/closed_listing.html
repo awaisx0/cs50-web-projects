@@ -1,19 +1,17 @@
 {% extends "auctions/layout.html" %}
 
 {% block title %}
-{{ auction.title }}
+Closed: {{ auction.title }}
 {% endblock %}
  
 {% block body %}
 
 
 
-<!-- CLOSER BY OWNER -->
-{% if user.is_authenticated and is_owner %}
+<!-- WINNER -->
+{% if user.is_authenticated and is_winner %}
 <div>
-    <h2>Close Auction</h2>
-    <a href="{% url 'close_auction' auction.id %}">Close</a>
-    <hr>
+    <h2>Congratulations! you're the winner of this auction</h2>
 </div>
 {% endif %}
 
@@ -27,7 +25,7 @@
 {% endif %}
 
 
-<h1>Listing: {{ auction.title }}</h1>
+<h1>Listing: {{ auction.title }} (Closed)</h1>
 
 {% if auction.img_url %}
     <img src="{{ auction.img_url }}" alt="">
@@ -43,11 +41,7 @@
 
     <div class="bid-section">
         <p>{{ bids_count }} bid(s) so far.</p>
-        <form action="{% url 'bid_view' auction.id %}" method="post">
-            {% csrf_token %}
-            {{ bidForm }}
-            <input type="submit" value="Place bid">
-        </form>
+        <p>No more biddings becuase auction is closed</p>
     </div>
 {% endif %}
 

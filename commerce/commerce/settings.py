@@ -124,3 +124,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "auctions/static/auctions")
 ]
+
+# login url reset
+LOGIN_URL = '/login'

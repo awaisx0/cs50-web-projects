@@ -44,6 +44,17 @@ textarea {
   resize: none;
 }
 
+select {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+}
+
+select option {
+  text-transform: capitalize;
+}
+
 a {
   font-size: 1.1rem;
 }
@@ -96,3 +107,7 @@ hr {
 }
 
 /* CREATE LISTING END */
+
+.categories-page li {
+  text-transform: capitalize;
+}
