@@ -111,3 +111,17 @@ hr {
 .categories-page li {
   text-transform: capitalize;
 }
+
+.closed {
+  background-color: gray;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+}
+
+.winner-div {
+  background-color: green;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+}

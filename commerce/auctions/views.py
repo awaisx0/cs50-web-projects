@@ -83,6 +83,8 @@ def create_new_listing(request):
             bid_price = form.cleaned_data["bid_price"]
             img_url = form.cleaned_data["img_url"]
             category = form.cleaned_data["category"]
+            
+            # category work
             category_obj = None
             if category:
                 category_obj = Category.objects.filter(id=category).first()
@@ -135,10 +137,22 @@ def listing_view(request, listing_id):
     # if current user matches owner object of auction, current user is the owner
     if request.user == owner:
         is_owner = True
+        
+    # Winner
+    is_winner = False
+    winner = auction.won_by
+    if request.user == winner:
+        is_winner = True
+        
+    
+    # IS_ACTIVE 
+    is_active = auction.is_active
     
     
     # rendering listing template
     return render(request, "auctions/listing.html", {
+        "is_active": is_active,
+        "is_winner": is_winner,
         "is_owner":  is_owner,
         "auction": auction,
         "bids_count": bids_count,
@@ -151,18 +165,23 @@ def listing_view(request, listing_id):
 
 
 
+
 # BID VIEW
 @login_required
 def bid_view(request, listing_id):
+    # get auction
     auction = Auction.objects.get(pk=listing_id)
+    # get bids on auction listing
     bids_on_listing = Bid.objects.filter(auction=auction)
     
+    # figuring out min bid
     initial_bid_price = auction.starting_bid
     min_bid = initial_bid_price
     if len(bids_on_listing) > 0:
         listings_max_bid = bids_on_listing.order_by("-bid_price").first().bid_price
         min_bid = listings_max_bid
     
+    # bidder (a User)
     bidder_id = request.user.id
     bidder = User.objects.get(pk=bidder_id)
     
@@ -187,42 +206,43 @@ def bid_view(request, listing_id):
                 "bidForm": bid_form
             })
             
-                
-                
+          
+          
+          
+#   Comment view
+@login_required       
 def comment_view(request, listing_id):
     if request.method == "POST":
         new_comment_form = NewCommentForm(request.POST)
         
         if new_comment_form.is_valid():
             comment_text = new_comment_form.cleaned_data.get("comment_text")
-            user_id = request.POST.get("user_id")
+            user_id = request.user.id
             
+            # get user and auction
             user = User.objects.get(pk=user_id)
             auction = Auction.objects.get(pk=listing_id)
 
+            # create comment and save
             new_comment = Comment(comment_text=comment_text, auction=auction, comment_by=user)
-
             new_comment.save()
+            
             return HttpResponseRedirect(reverse("listing_view", args=[listing_id]))
 
         
 # ADD TO WATCHLIST VIEW
 @login_required
 def add_watchlist(request, listing_id):
+    # get auction
     auction = Auction.objects.get(pk=listing_id)
+    # get user
     user = User.objects.get(pk=request.user.id)
+    # add to watchlist
     user.watchlist.add(auction)
+    # redirect back to listing_view
     return HttpResponseRedirect(reverse("listing_view", args=[listing_id]))
 
-# WATCHLIST view
-def watchlist(request):
-    user = User.objects.get(pk=request.user.id)
-    watch_auctions = user.watchlist.all()
-    return render(request, "auctions/watchlist.html", {
-        "watchlist": watch_auctions,
-    })
-    
-    
+
 # REMOVE FROM WATCHLIST VIEW
 @login_required
 def remove_watchlist(request, listing_id):
@@ -232,7 +252,22 @@ def remove_watchlist(request, listing_id):
     user = User.objects.get(pk=request.user.id)
     # remove auction from user watchlist
     user.watchlist.remove(auction)
+    # redirect back to listing_view
     return HttpResponseRedirect(reverse("listing_view", args=[listing_id]))
+
+
+# WATCHLIST view
+def watchlist(request):
+    user = User.objects.get(pk=request.user.id)
+    # get watchlist of auction
+    watch_auctions = user.watchlist.all()
+    # render watchlist on watchlist.html
+    return render(request, "auctions/watchlist.html", {
+        "watchlist": watch_auctions,
+    })
+    
+    
+
 
 @login_required
 def close_auction(request, listing_id):
@@ -243,7 +278,7 @@ def close_auction(request, listing_id):
     # get auction owner
     owner = auction.owner
     
-    # if owner is the user, "close" the auction
+    # if the current user is the owner, "close" the auction
     if request.user == owner:
         # set winner
         auction.won_by = highest_bidder
@@ -251,61 +286,14 @@ def close_auction(request, listing_id):
         auction.is_active = False
         auction.save()
         
-        return HttpResponseRedirect(reverse(closed_listing_view, args=[listing_id]))
+        return HttpResponseRedirect(reverse("listing_view", args=[listing_id]))
         
         
-    
-    return HttpResponseRedirect(reverse(listing_view, args=[listing_id]))
+    return HttpResponseRedirect(reverse("listing_view", args=[listing_id]))
 
-def closed_listing_view(request, listing_id):
-    # get auction listing
-    auction = Auction.objects.filter(id = listing_id).first()
-    # get comments
-    comments = Comment.objects.filter(auction=auction)
-    # bids count so far
-    bids_count = len(Bid.objects.filter(auction=auction))
-    
-    # initial price of auction
-    current_price = auction.starting_bid
-    # if more than 0 bids exist, get the bid_price of the highest bid
-    if bids_count > 0:
-        current_price = Bid.objects.filter(auction=auction).order_by("-bid_price").first().bid_price
-        
-        
-    added_watchlist = False
-    # get all users which have item on watchlist
-    watchers = auction.watchers.all()
-    # if current user is a watcher
-    if request.user in watchers:
-        added_watchlist = True
-        
-        
-    # User Ownership
-    is_owner = False
-    owner = auction.owner
-    # if current user matches owner object of auction, current user is the owner
-    if request.user == owner:
-        is_owner = True
-        
-    # Winner
-    is_winner = False
-    winner = auction.won_by
-    if request.user == winner:
-        is_winner = True
-    
-    
-    # rendering closed listing template
-    return render(request, "auctions/closed_listing.html", {
-        "is_owner":  is_owner,
-        "is_winner": is_winner,
-        "auction": auction,
-        "bids_count": bids_count,
-        "bid_price": current_price,
-        "added_watchlist": added_watchlist,
-        "commentForm": NewCommentForm(),
-        "comments": comments,
-    })
 
+
+# CATEGORIES VIEW
 
 def categories(request):
     all_categories = Category.objects.all()

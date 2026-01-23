@@ -11,6 +11,7 @@ class NewListingForm(forms.Form):
     img_url = forms.URLField(label="Image URL for the listing", required=False)
     category = forms.ChoiceField(choices=[], required=False)
     
+    # cs50 help in overriding the init method
     def __init__(self, *args, **kwargs):
         super(NewListingForm, self).__init__(*args, **kwargs)
         self.fields['category'].choices = [('', 'Select a category')] + [(obj.id, obj.category_name) for obj in Category.objects.all()]

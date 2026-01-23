@@ -9,11 +9,30 @@
 
 
 <!-- CLOSER BY OWNER -->
-{% if user.is_authenticated and is_owner %}
+{% if user.is_authenticated and is_owner and is_active %}
 <div>
     <h2>Close Auction</h2>
     <a href="{% url 'close_auction' auction.id %}">Close</a>
     <hr>
+</div>
+{% endif %}
+
+
+
+<!-- AUCTION CLOSED -->
+{% if not is_active %}
+<div class="closed">
+    <h2>This Auction has been closed</h2>
+</div>
+
+{% endif %}
+
+
+
+<!-- WINNER -->
+{% if user.is_authenticated and is_winner %}
+<div class="winner-div">
+    <h2>Congratulations! You're the winner of this auction</h2>
 </div>
 {% endif %}
 
@@ -37,11 +56,12 @@
 
 <h2>${{ bid_price }}</h2>
 
-{% if user.is_authenticated %}
 
 <!-- BID SECTION -->
 
-    <div class="bid-section">
+{% if user.is_authenticated  and is_active %}
+
+<div class="bid-section">
         <p>{{ bids_count }} bid(s) so far.</p>
         <form action="{% url 'bid_view' auction.id %}" method="post">
             {% csrf_token %}
@@ -68,7 +88,6 @@
     <form action="{% url 'comment_view' auction.id %}" method="post">
         {% csrf_token %}
         {{ commentForm }}
-        <input type="hidden" name="user_id" value="{{ user.id }}" >
         <input type="submit" value="comment" >
 
     </form>
