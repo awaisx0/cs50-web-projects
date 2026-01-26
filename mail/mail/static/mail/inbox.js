@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // send email on
   let send_email_btn = document.querySelector(".send-email-btn");
   console.log(send_email_btn);
-  send_email_btn.addEventListener("submit", send_email);
+  send_email_btn.addEventListener("click", send_email);
 });
 
 function compose_email() {
@@ -39,6 +39,26 @@ function load_mailbox(mailbox) {
   // Show the mailbox name
   document.querySelector("#emails-view").innerHTML =
     `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+  fetch(`http://127.0.0.1:8000/emails/${mailbox}`)
+    .then((response) => response.json())
+    .then((emails) => {
+      emails.forEach((email) => {
+        console.log(email);
+        let email_div = document.createElement("div");
+        let email_sender = document.createElement("span");
+        email_sender.innerHTML = email.sender;
+        let email_subject = document.createElement("span");
+        email_subject.innerHTML = email.subject;
+        let email_timestamp = document.createElement("span");
+        email_timestamp.innerHTML = email.timestamp;
+        email_div.appendChild(email_sender);
+        email_div.appendChild(email_subject);
+        email_div.append(email_timestamp);
+        document.querySelector("#emails-view").append(email_div);
+        console.log(email_div);
+      });
+    });
 }
 
 // Send email
@@ -66,6 +86,8 @@ function send_email(e) {
     .then((result) => console.log(result))
     .catch((err) => console.log(err));
   console.log("here 5");
+
+  load_mailbox("inbox");
 
   return false;
 }
