@@ -16,10 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // send email on click of send email button
   let send_email_btn = document.querySelector(".send-email-btn");
-  console.log(send_email_btn);
   send_email_btn.addEventListener("click", send_email);
-  // load back sent mailbox
-  load_mailbox("sent");
 });
 
 function compose_email() {
@@ -76,7 +73,7 @@ function load_emails(mailbox) {
 
         // add view_email on click
         email_div.addEventListener("click", function () {
-          view_email(email.id);
+          email_view(email.id);
         });
 
         if (mailbox === "inbox") {
@@ -90,6 +87,7 @@ function load_emails(mailbox) {
               }),
             });
             // take care of propagations
+            e.stopPropagation();
             load_mailbox("inbox");
           });
           email_div.appendChild(archive_btn);
@@ -98,13 +96,14 @@ function load_emails(mailbox) {
         if (mailbox === "archive") {
           let unarchive_btn = document.createElement("button");
           unarchive_btn.innerHTML = "Unarchive";
-          unarchive_btn.addEventListener("click", function () {
+          unarchive_btn.addEventListener("click", function (e) {
             fetch(`http://127.0.0.1:8000/emails/${email.id}`, {
               method: "PUT",
               body: JSON.stringify({
                 archived: false,
               }),
             });
+            e.stopPropagation();
             load_mailbox("inbox");
           });
           email_div.appendChild(unarchive_btn);
@@ -116,43 +115,38 @@ function load_emails(mailbox) {
     });
 }
 
-const view_email = (email_id) => {
-  // handle displaying of views
+const email_view = (email_id) => {
+  // handle displaying of email-view
   document.querySelector("#email-view").style.display = "block";
   document.querySelector("#compose-view").style.display = "none";
   document.querySelector("#emails-view").style.display = "none";
 
+  // clear out previous email fields
+  document.querySelector(".email-sender").innerHTML = "";
+  document.querySelector(".email-recipients").innerHTML = "";
+  document.querySelector(".email-subject").innerHTML = "";
+  document.querySelector(".email-timestamp").innerHTML = "";
+  document.querySelector(".email-body").innerHTML = "";
+
+  // fetch email contents
   fetch(`http://127.0.0.1:8000/emails/${email_id}`)
     .then((res) => res.json())
     .then((email) => {
-      let email_sender = document.createElement("h3");
-      email_sender.innerHTML = email.sender;
+      document.querySelector(".email-sender").innerHTML = email.sender;
+      document.querySelector(".email-recipients").innerHTML = email.recipients;
+      document.querySelector(".email-subject").innerHTML = email.subject;
+      document.querySelector(".email-timestamp").innerHTML = email.timestamp;
+      document.querySelector(".email-body").innerHTML = email.body;
 
-      let email_recipients = document.createElement("h3");
-      email_recipients.innerHTML = email.recipients.join(", ");
-
-      let email_subject = document.createElement("h2");
-      email_subject.innerHTML = email.subject;
-
-      let email_timestamp = document.createElement("p");
-      email_timestamp.innerHTML = email.timestamp;
-
-      let email_body = document.createElement("p");
-      email_body.innerHTML = email.body;
-
-      // append to dom
       document
-        .querySelector("#email-view")
-        .append(
-          email_sender,
-          email_recipients,
-          email_subject,
-          email_timestamp,
-          email_body,
-        );
+        .querySelector("#reply-btn")
+        .addEventListener("click", function () {
+          reply_email(email.sender, email.subject, email.body, email.timestamp);
+        });
     })
     .catch((err) => console.log("error: ", err));
 
+  // mark email as read with PUT at /emails/<email_id>
   fetch(`http://127.0.0.1:8000/emails/${email_id}`, {
     method: "PUT",
     body: JSON.stringify({
@@ -182,5 +176,20 @@ function send_email(e) {
     .then((result) => console.log(result))
     .catch((err) => console.log(err));
 
+  load_mailbox("sent");
+
   return false;
+}
+
+function reply_email(sender, subject, body, timestamp) {
+  compose_email();
+  document.querySelector("#compose-recipients").value = sender;
+  let compose_subject = document.querySelector("#compose-subject");
+  if (subject.startsWith("Re:")) {
+    compose_subject.value = subject;
+  } else {
+    compose_subject.value = `Re: ${subject}`;
+  }
+  document.querySelector("#compose-body").value =
+    `"On ${timestamp} ${sender} wrote:\n${body}\n"`;
 }
